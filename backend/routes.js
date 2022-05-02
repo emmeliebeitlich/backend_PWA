@@ -4,6 +4,58 @@ const User = require('./models/users');
 const Post = require('./models/posts');
 const Comment = require('./models/comments');
 const Like = require('./models/likes');
+const webpush = require('web-push');
+
+
+/**
+ * Push Notifikations
+ *
+ */
+
+
+const vapidKeys = {
+    "publicKey": "BGN198g_25a8YR1G9fpxp2dhFyHbPZrfWM8UWOSgVebwUAfCQb9aQBRExDBF_5HKEWVqH-6oAEfHMCyH6Tfa080",
+    "privateKey": "8lIagNaeuvtj1991Fw534dStLH1Kojt6oLmaCG6JTvQ"
+}
+
+webpush.setVapidDetails(
+    'mailto:finn.owe.freiheit@gmail.com',
+    vapidKeys.publicKey,
+    vapidKeys.privateKey
+);
+
+const tempDataBase = [];
+
+router.post('/subscription',(req, res) => {
+    //ToDO Safe in MongoDB
+    tempDataBase.push(req.body)
+    console.log(req.body);
+    res.send(tempDataBase);
+});
+
+router.post('/sendNotification', (req, res) => {
+    const notificationPayload = {
+        notification: {
+            title: 'Neue Notification',
+            body: 'Das ist der Inhalt der Notification'
+        },
+    }
+    const promises = []
+    tempDataBase.forEach(subscription => {
+        promises.push(
+            webpush.sendNotification(
+                subscription,
+                JSON.stringify(notificationPayload)
+            )
+        )
+    })
+    Promise.all(promises)
+        .then(() => res.status(200).json({message: 'Newsletter sent successfully.'}))
+        .catch(err => console.log('Push Error: ',err));
+});
+
+
+
 
 
 /**
