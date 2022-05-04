@@ -438,23 +438,18 @@ router.delete('/likes/:id', async(req, res) => {
 // login 
 // searching for user by username in db and comparing password with inserted password 
 
-router.get('/users/:username/password', async(req, res) => {
+router.get('/users/:username/:password', async(req, res) => {
     try {
-        const password = await Password.findOne({ username: req.params.username });
-        try {
-            password == req.body.password;
-            console.log(req.params);
-            res.send(_id);
-        } catch {
-            res.status(404);
-            res.send({
-            error: "Password is wrong!"
+        const user = await User.findOne({ 
+            username: req.body.username,
+            password: req.body.password,
         });
-        }
+        console.log(req.params);
+        res.send(_id);
     } catch {
         res.status(404);
         res.send({
-            error: "Username does not exist!"
+            error: "Username or password wrong!"
         });
     }
 });
