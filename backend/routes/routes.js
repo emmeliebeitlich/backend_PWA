@@ -8,7 +8,7 @@ const webpush = require('web-push');
 
 
 /**
- * Push Notifikations
+ * Push Notifications
  *
  */
 
@@ -94,20 +94,6 @@ router.get('/users/:id/username', async(req, res) => {
         res.status(404);
         res.send({
             error: "Username does not exist!"
-        });
-    }
-});
-
-// get password of user by id
-router.get('/users/:id/password', async(req, res) => {
-    try {
-        const user = await User.findOne({ _id: req.params.id });
-        console.log(req.params);
-        res.send(user.password);
-    } catch {
-        res.status(404);
-        res.send({
-            error: "Password does not exist!"
         });
     }
 });
@@ -448,5 +434,29 @@ router.delete('/likes/:id', async(req, res) => {
     }
 });
 
+
+// login 
+// searching for user by username in db and comparing password with inserted password 
+
+router.get('/users/:username/password', async(req, res) => {
+    try {
+        const password = await Password.findOne({ username: req.params.username });
+        try {
+            password == req.body.password;
+            console.log(req.params);
+            res.send(_id);
+        } catch {
+            res.status(404);
+            res.send({
+            error: "Password is wrong!"
+        });
+        }
+    } catch {
+        res.status(404);
+        res.send({
+            error: "Username does not exist!"
+        });
+    }
+});
 
 module.exports = router;
