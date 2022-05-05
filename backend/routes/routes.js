@@ -71,7 +71,7 @@ router.get('/users', async(req, res) => {
 });
 
 // get user by id
-router.get('/users/:id', async(req, res) => {
+router.get('/users/id/:id', async(req, res) => {
     try {
         const user = await User.findOne({ _id: req.params.id });
         console.log(req.params);
@@ -84,8 +84,10 @@ router.get('/users/:id', async(req, res) => {
     }
 });
 
+
+
 // get username of user by id
-router.get('/users/:id/username', async(req, res) => {
+router.get('/users/id/:id/username', async(req, res) => {
     try {
         const user = await User.findOne({ _id: req.params.id });
         console.log(req.params);
@@ -98,8 +100,22 @@ router.get('/users/:id/username', async(req, res) => {
     }
 });
 
+// get password of user by id
+router.get('/users/id/:id/password', async(req, res) => {
+    try {
+        const user = await User.findOne({ _id: req.params.id });
+        console.log(req.params);
+        res.send(user.password);
+    } catch {
+        res.status(404);
+        res.send({
+            error: "Password does not exist!"
+        });
+    }
+});
+
 // get pictureID of user by id
-router.get('/users/:id/pictureId', async(req, res) => {
+router.get('/users/id/:id/pictureId', async(req, res) => {
     try {
         const user = await User.findOne({ _id: req.params.id });
         console.log(req.params);
@@ -436,18 +452,18 @@ router.delete('/likes/:id', async(req, res) => {
 
 
 // login 
-// searching for user by username in db and comparing password with inserted password 
+// searching for user by username and password, if there's one user with this data, login is successfull, if not error 
 
-router.get('/users/:username/:password', async(req, res) => {
+router.get('/users/name/:username/:password', async(req, res) => {
     try {
         const user = await User.findOne({ 
             username: req.body.username,
             password: req.body.password,
         });
         console.log(req.params);
-        res.send(_id);
+        res.send(user.id);
     } catch {
-        res.status(404);
+        res.status(401);
         res.send({
             error: "Username or password wrong!"
         });
