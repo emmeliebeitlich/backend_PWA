@@ -454,13 +454,13 @@ router.delete('/likes/:id', async(req, res) => {
 // login 
 // searching for user by username and password, if there's one user with this data, login is successfull, if not error 
 
-router.get('/users/name/:username/:password', async(req, res) => {
+router.get('/users/login', async(req, res) => {
     try {
         const user = await User.findOne({ 
             username: req.body.username,
             password: req.body.password,
         });
-        console.log(req.params);
+        console.log('login request');
         res.send(user.id);
     } catch {
         res.status(401);
