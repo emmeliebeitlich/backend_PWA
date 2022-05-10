@@ -313,7 +313,7 @@ router.post('/comments', async(req, res) => {
     const newComment = new Comment({
         _id: req.params.id,
         message: req.body.message,
-        username: req.body.pictureId,
+        username: req.body.username,
     })
     await newComment.save();
     res.send(newComment);
