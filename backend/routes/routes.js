@@ -149,16 +149,16 @@ router.get('/comments/:id', async(req, res) => {
     }
 });
 
-// get userid of comment by id
-router.get('/comments/:id/userId', async(req, res) => {
+// get username of comment by id
+router.get('/comments/:id/username', async(req, res) => {
     try {
         const comment = await Comment.findOne({ _id: req.params.id });
         console.log(req.params);
-        res.send(comment.userId);
+        res.send(comment.username);
     } catch {
         res.status(404);
         res.send({
-            error: "UserID does not exist!"
+            error: "Username does not exist!"
         });
     }
 });
@@ -173,20 +173,6 @@ router.get('/comments/:id/message', async(req, res) => {
         res.status(404);
         res.send({
             error: "Message does not exist!"
-        });
-    }
-});
-
-// get pictureID of comment by id
-router.get('/comments/:id/pictureId', async(req, res) => {
-    try {
-        const comment = await Comment.findOne({ _id: req.params.id });
-        console.log(req.params);
-        res.send(comment.pictureId);
-    } catch {
-        res.status(404);
-        res.send({
-            error: "PictureID does not exist!"
         });
     }
 });
@@ -326,9 +312,8 @@ router.post('/users', async(req, res) => {
 router.post('/comments', async(req, res) => {
     const newComment = new Comment({
         _id: req.params.id,
-        userId: req.body.userId,
         message: req.body.message,
-        pictureId: req.body.pictureId,
+        username: req.body.pictureId,
     })
     await newComment.save();
     res.send(newComment);
